@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dealer</groupId>
     <artifactId>grinder-groovy</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <url>http://grinder.sourceforge.net</url>
