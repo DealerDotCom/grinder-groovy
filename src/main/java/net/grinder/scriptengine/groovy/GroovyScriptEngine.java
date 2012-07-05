@@ -21,7 +21,9 @@ import java.util.concurrent.Callable;
 public class GroovyScriptEngine implements ScriptEngine {
     private static final String TEST_RUNNER_CLOSURE_NAME = "testRunner";
 
-    private final GroovyObject m_groovyObject;
+    //private final GroovyObject m_groovyObject;
+
+    private final Class m_groovyClass;
 
     /**
      * Construct a GroovyScriptEngine that will use the supplied ScriptLocation.
@@ -36,18 +38,16 @@ public class GroovyScriptEngine implements ScriptEngine {
         final GroovyClassLoader loader = new GroovyClassLoader(parent);
 
         try {
-            final Class testRunnerClass = loader.parseClass(script.getFile());
+            m_groovyClass = loader.parseClass(script.getFile());
 
             // fail fast if there is no appropriate closure to call
             final GroovyObject groovyObject =
-                    (GroovyObject) testRunnerClass.newInstance();
+                    (GroovyObject) m_groovyClass.newInstance();
             // test that the method exists - fail fast otherwise
             final Callable<?> closure =
                     (Callable<?>) groovyObject
                                      .getProperty(TEST_RUNNER_CLOSURE_NAME);
             assert closure != null;
-
-            m_groovyObject = groovyObject;
         }
         catch (IOException io) {
             throw new EngineException("Unable to parse groovy script at: " +
@@ -84,7 +84,21 @@ public class GroovyScriptEngine implements ScriptEngine {
     @Override
     public ScriptEngineService.WorkerRunnable
             createWorkerRunnable() throws EngineException {
-        return new GroovyWorkerRunnable(m_groovyObject);
+        final GroovyObject groovyObject;
+
+        try {
+            groovyObject = (GroovyObject) m_groovyClass.newInstance();
+        }
+        catch (InstantiationException e) {
+            throw new EngineException(
+                "Unable to instantiate worker runner.", e);
+        }
+        catch (IllegalAccessException e) {
+            throw new EngineException(
+                "Unable to create worker runner", e);
+        }
+
+        return new GroovyWorkerRunnable(groovyObject);
     }
 
 
