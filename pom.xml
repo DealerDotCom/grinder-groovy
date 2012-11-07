@@ -37,7 +37,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <grinder.version>3.8</grinder.version>
+        <grinder.version>3.11</grinder.version>
     </properties>
 
     <dependencies>
