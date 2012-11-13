@@ -21,8 +21,6 @@ import java.util.concurrent.Callable;
 public class GroovyScriptEngine implements ScriptEngine {
     private static final String TEST_RUNNER_CLOSURE_NAME = "testRunner";
 
-    //private final GroovyObject m_groovyObject;
-
     private final Class m_groovyClass;
 
     /**

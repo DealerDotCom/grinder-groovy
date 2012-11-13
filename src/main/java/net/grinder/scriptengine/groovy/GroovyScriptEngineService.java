@@ -31,7 +31,9 @@ public class GroovyScriptEngineService implements ScriptEngineService {
                 return new GroovyScriptEngine(script);
             }
             catch (LinkageError e) {
-                throw new EngineException("Groovy is not on the classpath", e);
+                throw new EngineException("There was a linkage exception. " +
+                    "(This could be caused by a syntax error in the script, " +
+                    "or by Groovy not being on the classpath)", e);
             }
         }
 
